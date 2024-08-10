@@ -2,6 +2,8 @@ import { FiInfo, FiMessageSquare, FiCheckCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { GitHubIssue, State } from "../interfaces";
 import { FC } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { getIssue, getIssueComments } from "../actions";
 
 interface Props {
   issue: GitHubIssue;
@@ -9,9 +11,33 @@ interface Props {
 
 export const IssueItem: FC<Props> = ({ issue }) => {
   const navigate = useNavigate();
+  const queryCLient = useQueryClient();
+
+  const prefetchData = () => {
+    queryCLient.prefetchQuery({
+      queryKey: ["issues", issue.number],
+      queryFn: () => getIssue(issue.number),
+      staleTime: 60000,
+    });
+    queryCLient.prefetchQuery({
+      queryKey: ["issues", issue.number, "comments"],
+      queryFn: () => getIssueComments(issue.number),
+      staleTime: 60000,
+    });
+  };
+
+  const presetData = () => {
+    queryCLient.setQueryData(["issues", issue.number], issue, {
+      updatedAt: Date.now() + 60000,
+    });
+  };
 
   return (
-    <div className="animate-fadeIn flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800">
+    <div
+      // onMouseEnter={prefetchData}
+      onMouseEnter={presetData}
+      className="animate-fadeIn flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800"
+    >
       {issue.state === State.Close ? (
         <FiCheckCircle size={30} color="green" className="min-w-10" />
       ) : (
