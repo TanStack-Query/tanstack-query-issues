@@ -4,6 +4,7 @@ import { GitHubIssue, State } from "../interfaces";
 import { FC } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getIssue, getIssueComments } from "../actions";
+import { timeSince } from "../../helpers";
 
 interface Props {
   issue: GitHubIssue;
@@ -26,11 +27,11 @@ export const IssueItem: FC<Props> = ({ issue }) => {
     });
   };
 
-  const presetData = () => {
-    queryCLient.setQueryData(["issues", issue.number], issue, {
-      updatedAt: Date.now() + 60000,
-    });
-  };
+  // const presetData = () => {
+  //   queryCLient.setQueryData(["issues", issue.number], issue, {
+  //     updatedAt: Date.now() + 60000,
+  //   });
+  // };
 
   return (
     <div
@@ -52,9 +53,23 @@ export const IssueItem: FC<Props> = ({ issue }) => {
           {issue.title}
         </a>
         <span className="text-gray-500">
-          #${issue.number} opened 2 days ago by{" "}
+          #${issue.number} opened {timeSince(issue.created_at)} ago by{" "}
           <span className="font-bold">{issue.user.login}</span>
         </span>
+
+        <div className="flex flex-map">
+          {issue.labels.map((label) => (
+            <span
+              key={label.id}
+              className="px-2 py-1 mr-2 text-xs text-white rounded-md"
+              style={{
+                border: `1px solid #${label.color}`,
+              }}
+            >
+              {label.name}
+            </span>
+          ))}
+        </div>
       </div>
 
       <img
