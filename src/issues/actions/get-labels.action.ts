@@ -7,7 +7,5 @@ export const getLabels = async (): Promise<GitHubLabel[]> => {
 
   const { data } = await githubApi.get<GitHubLabel[]>("/labels");
 
-  console.log(data);
-
   return data;
 };
