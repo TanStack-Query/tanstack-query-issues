@@ -1,19 +1,36 @@
 import { FC } from "react";
-import { GitHubIssue } from "../interfaces";
+import { GitHubIssue, State } from "../interfaces";
 import { IssueItem } from "./IssueItem";
 
 interface Props {
   issues: GitHubIssue[];
+  state: State;
+  onChangeState: (state: State) => void;
 }
 
-export const IssueList: FC<Props> = ({ issues }) => {
+export const IssueList: FC<Props> = ({ issues, onChangeState, state }) => {
   return (
     <>
       {/* Botones de All, Open, Closed */}
       <div className="flex gap-4">
-        <button className="btn active">All</button>
-        <button className="btn">Open</button>
-        <button className="btn">Closed</button>
+        <button
+          onClick={() => onChangeState(State.All)}
+          className={`btn ${state === State.All ? "active" : ""}`}
+        >
+          All
+        </button>
+        <button
+          onClick={() => onChangeState(State.Open)}
+          className={`btn ${state === State.Open ? "active" : ""}`}
+        >
+          Open
+        </button>
+        <button
+          onClick={() => onChangeState(State.Close)}
+          className={`btn ${state === State.Close ? "active" : ""}`}
+        >
+          Closed
+        </button>
       </div>
 
       {/* Lista de issues */}
