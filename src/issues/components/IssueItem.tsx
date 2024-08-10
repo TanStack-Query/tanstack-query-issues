@@ -34,8 +34,8 @@ export const IssueItem: FC<Props> = ({ issue }) => {
 
   return (
     <div
-      // onMouseEnter={prefetchData}
-      onMouseEnter={presetData}
+      onMouseEnter={prefetchData}
+      //onMouseEnter={presetData}
       className="animate-fadeIn flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800"
     >
       {issue.state === State.Close ? (
