@@ -5,9 +5,8 @@ export const useIssues = () => {
   const issuesQuery = useQuery({
     queryKey: ["issues"],
     queryFn: getIssues,
+    staleTime: 60000,
   });
-
-  console.log(issuesQuery.data);
 
   return { issuesQuery };
 };
